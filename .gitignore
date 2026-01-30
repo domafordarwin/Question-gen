@@ -51,6 +51,9 @@
 .DS_Store
 Thumbs.db
 
+# Raw data (local only)
+/rawData/
+
 # Credentials (keep encrypted version, ignore unencrypted)
 /config/credentials/*.key
 /config/master.key
