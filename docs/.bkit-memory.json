@@ -1,0 +1,17 @@
+{
+  "projectName": "Question-gen-App",
+  "description": "학생의 발문 생성 능력을 키워주는 학습 도우미 SaaS",
+  "level": "Dynamic",
+  "framework": "Ruby on Rails",
+  "deployment": "Railway",
+  "sessionCount": 2,
+  "lastSession": {
+    "startedAt": "2026-01-31T00:00:00.000Z",
+    "platform": "claude",
+    "level": "Dynamic"
+  },
+  "pdcaStatus": {
+    "currentPhase": "plan",
+    "features": []
+  }
+}

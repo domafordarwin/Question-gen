@@ -1,0 +1,56 @@
+# Ruby / Rails
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# Documentation cache
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Rails
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/storage/*
+!/storage/.keep
+/public/assets
+.byebug_history
+
+# Bundler
+/.bundle
+/vendor/bundle
+
+# Node (if using webpacker/esbuild)
+/node_modules
+/yarn-error.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Credentials (keep encrypted version, ignore unencrypted)
+/config/credentials/*.key
+/config/master.key
