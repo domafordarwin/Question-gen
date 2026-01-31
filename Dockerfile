@@ -81,3 +81,4 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 ENV PORT=3000
 EXPOSE 3000
 CMD ["sh", "-c", "./bin/rails server -b 0.0.0.0 -p ${PORT}"]
+# Cache bust: 1769826351
