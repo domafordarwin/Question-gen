@@ -1,0 +1,61 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h1 class="text-center text-3xl font-bold text-gray-900">Question-gen</h1>
+      <h2 class="mt-6 text-center text-2xl font-semibold text-gray-900">로그인</h2>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "mt-8 space-y-6" }, data: { controller: "form-validation" }) do |f| %>
+      <div class="rounded-md shadow-sm space-y-4">
+        <div>
+          <%= f.label :email, "이메일", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.email_field :email,
+              autofocus: true,
+              autocomplete: "email",
+              placeholder: "email@example.com",
+              class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm",
+              data: { form_validation_target: "email", action: "input->form-validation#validate" } %>
+        </div>
+
+        <div>
+          <%= f.label :password, "비밀번호", class: "block text-sm font-medium text-gray-700" %>
+          <div class="relative" data-controller="password-visibility">
+            <%= f.password_field :password,
+                autocomplete: "current-password",
+                placeholder: "비밀번호를 입력하세요",
+                class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10",
+                data: { password_visibility_target: "input", form_validation_target: "password", action: "input->form-validation#validate" } %>
+            <button type="button"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    data-action="click->password-visibility#toggle">
+              <span data-password-visibility-target="icon">👁</span>
+            </button>
+          </div>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="flex items-center">
+            <%= f.check_box :remember_me, class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" %>
+            <%= f.label :remember_me, "로그인 상태 유지", class: "ml-2 block text-sm text-gray-900" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.submit "로그인",
+            class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer",
+            data: { form_validation_target: "submit" } %>
+      </div>
+    <% end %>
+
+    <div class="text-center space-y-2">
+      <p class="text-sm text-gray-600">
+        <%= link_to "비밀번호를 잊으셨나요?", new_password_path(resource_name), class: "font-medium text-blue-600 hover:text-blue-500" %>
+      </p>
+      <p class="text-sm text-gray-600">
+        계정이 없으신가요?
+        <%= link_to "회원가입", new_registration_path(resource_name), class: "font-medium text-blue-600 hover:text-blue-500" %>
+      </p>
+    </div>
+  </div>
+</div>

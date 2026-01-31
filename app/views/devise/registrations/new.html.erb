@@ -1,0 +1,82 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h1 class="text-center text-3xl font-bold text-gray-900">Question-gen</h1>
+      <h2 class="mt-6 text-center text-2xl font-semibold text-gray-900">회원가입</h2>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "mt-8 space-y-6" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="rounded-md shadow-sm space-y-4">
+        <div>
+          <%= f.label :name, "이름", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.text_field :name,
+              autofocus: true,
+              autocomplete: "name",
+              placeholder: "홍길동",
+              class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :email, "이메일", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.email_field :email,
+              autocomplete: "email",
+              placeholder: "email@example.com",
+              class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :role, "역할 선택", class: "block text-sm font-medium text-gray-700" %>
+          <div class="mt-2 space-x-4">
+            <label class="inline-flex items-center">
+              <%= f.radio_button :role, "student", checked: true, class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" %>
+              <span class="ml-2 text-sm text-gray-700">학생</span>
+            </label>
+            <label class="inline-flex items-center">
+              <%= f.radio_button :role, "teacher", class: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" %>
+              <span class="ml-2 text-sm text-gray-700">교사</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :password, "비밀번호", class: "block text-sm font-medium text-gray-700" %>
+          <p class="text-xs text-gray-500 mb-1">8자 이상, 영문+숫자 조합</p>
+          <div class="relative" data-controller="password-visibility">
+            <%= f.password_field :password,
+                autocomplete: "new-password",
+                placeholder: "비밀번호를 입력하세요",
+                class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10",
+                data: { password_visibility_target: "input" } %>
+            <button type="button"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    data-action="click->password-visibility#toggle">
+              <span data-password-visibility-target="icon">👁</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :password_confirmation, "비밀번호 확인", class: "block text-sm font-medium text-gray-700" %>
+          <%= f.password_field :password_confirmation,
+              autocomplete: "new-password",
+              placeholder: "비밀번호를 다시 입력하세요",
+              class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.submit "회원가입",
+            class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer" %>
+      </div>
+    <% end %>
+
+    <div class="text-center">
+      <p class="text-sm text-gray-600">
+        이미 계정이 있으신가요?
+        <%= link_to "로그인", new_session_path(resource_name), class: "font-medium text-blue-600 hover:text-blue-500" %>
+      </p>
+    </div>
+  </div>
+</div>
