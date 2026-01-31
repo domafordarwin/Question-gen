@@ -1,0 +1,174 @@
+<%#
+  Input Component
+
+  Usage (with form builder):
+    <%= render "shared/input", form: f, field: :email, label: "이메일" %>
+    <%= render "shared/input", form: f, field: :password, label: "비밀번호", type: :password %>
+    <%= render "shared/input", form: f, field: :name, label: "이름", placeholder: "홍길동", required: true %>
+
+  Usage (standalone):
+    <%= render "shared/input", name: "search", label: "검색", placeholder: "검색어 입력" %>
+
+  With validation:
+    <%= render "shared/input", form: f, field: :email, label: "이메일",
+        validation_rules: "required,email",
+        error_message: @user.errors[:email].first %>
+
+  Parameters:
+    - form: (FormBuilder) Rails form builder (optional)
+    - field: (Symbol) 필드 이름 (form 사용 시 필수)
+    - name: (String) input name 속성 (standalone 사용 시)
+    - label: (String) 라벨 텍스트
+    - type: (Symbol) :text, :email, :password, :number, :tel, :url, :search (default: :text)
+    - placeholder: (String) placeholder 텍스트
+    - required: (Boolean) 필수 여부 (default: false)
+    - disabled: (Boolean) 비활성화 (default: false)
+    - readonly: (Boolean) 읽기 전용 (default: false)
+    - hint: (String) 힌트 텍스트
+    - error_message: (String) 에러 메시지
+    - validation_rules: (String) 유효성 검사 규칙 (예: "required,email,minLength:8")
+    - autocomplete: (String) autocomplete 속성
+    - class: (String) 추가 CSS 클래스
+    - wrapper_class: (String) wrapper div 클래스
+    - **options: 기타 HTML 속성
+-%>
+<%
+  form ||= nil
+  field ||= nil
+  name ||= field.to_s
+  label_text ||= defined?(label) ? label : nil
+  type ||= :text
+  placeholder ||= nil
+  required ||= false
+  disabled ||= false
+  readonly ||= false
+  hint ||= nil
+  error_message ||= nil
+  validation_rules ||= nil
+  autocomplete ||= nil
+  extra_class ||= ""
+  wrapper_class ||= ""
+
+  has_error = error_message.present?
+
+  base_input_classes = "appearance-none block w-full px-3 py-2 border rounded-md placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm"
+
+  state_classes = if has_error
+    "border-red-500 focus:ring-red-500 focus:border-red-500"
+  else
+    "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+  end
+
+  disabled_classes = disabled ? "bg-gray-100 cursor-not-allowed" : ""
+
+  input_classes = [base_input_classes, state_classes, disabled_classes, extra_class].compact.join(" ")
+
+  # Data attributes for Stimulus validation
+  data_attrs = {}
+  if validation_rules.present?
+    data_attrs[:validation_rules] = validation_rules
+    data_attrs[:form_validation_target] = "field"
+    data_attrs[:action] = "blur->form-validation#validateField input->form-validation#clearError"
+  end
+%>
+
+<div class="<%= wrapper_class %>">
+  <% if label_text.present? %>
+    <% if form %>
+      <%= form.label field, label_text, class: "block text-sm font-medium text-gray-700" %>
+    <% else %>
+      <label for="<%= name %>" class="block text-sm font-medium text-gray-700"><%= label_text %></label>
+    <% end %>
+  <% end %>
+
+  <% if hint.present? %>
+    <p class="text-xs text-gray-500 mb-1"><%= hint %></p>
+  <% end %>
+
+  <div class="mt-1">
+    <% if form %>
+      <% case type %>
+      <% when :password %>
+        <div class="relative" data-controller="password-visibility">
+          <%= form.password_field field,
+              placeholder: placeholder,
+              required: required,
+              disabled: disabled,
+              readonly: readonly,
+              autocomplete: autocomplete,
+              class: "#{input_classes} pr-10",
+              data: data_attrs.merge(password_visibility_target: "input") %>
+          <button type="button"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  data-action="click->password-visibility#toggle">
+            <span data-password-visibility-target="icon">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      <% when :textarea %>
+        <%= form.text_area field,
+            placeholder: placeholder,
+            required: required,
+            disabled: disabled,
+            readonly: readonly,
+            class: input_classes,
+            rows: 4,
+            data: data_attrs %>
+      <% else %>
+        <%= form.send(:"#{type}_field", field,
+            placeholder: placeholder,
+            required: required,
+            disabled: disabled,
+            readonly: readonly,
+            autocomplete: autocomplete,
+            class: input_classes,
+            data: data_attrs) %>
+      <% end %>
+    <% else %>
+      <% if type == :password %>
+        <div class="relative" data-controller="password-visibility">
+          <input type="password"
+                 name="<%= name %>"
+                 id="<%= name %>"
+                 placeholder="<%= placeholder %>"
+                 <%= "required" if required %>
+                 <%= "disabled" if disabled %>
+                 <%= "readonly" if readonly %>
+                 autocomplete="<%= autocomplete %>"
+                 class="<%= input_classes %> pr-10"
+                 data-password-visibility-target="input"
+                 <%= data_attrs.map { |k, v| "data-#{k.to_s.dasherize}=\"#{v}\"" }.join(" ").html_safe %>>
+          <button type="button"
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  data-action="click->password-visibility#toggle">
+            <span data-password-visibility-target="icon">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      <% else %>
+        <input type="<%= type %>"
+               name="<%= name %>"
+               id="<%= name %>"
+               placeholder="<%= placeholder %>"
+               <%= "required" if required %>
+               <%= "disabled" if disabled %>
+               <%= "readonly" if readonly %>
+               autocomplete="<%= autocomplete %>"
+               class="<%= input_classes %>"
+               <%= data_attrs.map { |k, v| "data-#{k.to_s.dasherize}=\"#{v}\"" }.join(" ").html_safe %>>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if has_error %>
+    <p class="mt-1 text-sm text-red-600"><%= error_message %></p>
+  <% end %>
+</div>

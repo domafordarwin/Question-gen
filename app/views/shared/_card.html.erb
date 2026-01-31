@@ -1,0 +1,125 @@
+<%#
+  Card Component
+
+  Usage:
+    <%= render "shared/card" do %>
+      <p>카드 내용</p>
+    <% end %>
+
+    <%= render "shared/card", title: "제목", subtitle: "부제목" do %>
+      <p>카드 내용</p>
+    <% end %>
+
+  Colored variants (for role-based UI):
+    <%= render "shared/card", variant: :blue, title: "학생용" do %>
+      내용
+    <% end %>
+
+    <%= render "shared/card", variant: :green, title: "교사용" do %>
+      내용
+    <% end %>
+
+  With footer:
+    <%= render "shared/card", title: "제목" do |card| %>
+      <% card.with_body do %>
+        본문 내용
+      <% end %>
+      <% card.with_footer do %>
+        <%= render "shared/button", text: "확인" %>
+      <% end %>
+    <% end %>
+
+  Parameters:
+    - variant: (Symbol) :default, :blue, :green, :red, :yellow, :purple (default: :default)
+    - title: (String) 카드 제목
+    - subtitle: (String) 카드 부제목
+    - padding: (Symbol) :none, :sm, :md, :lg (default: :md)
+    - shadow: (Boolean) 그림자 표시 (default: true for :default variant)
+    - border: (Boolean) 테두리 표시 (default: false)
+    - rounded: (Symbol) :sm, :md, :lg (default: :lg)
+    - class: (String) 추가 CSS 클래스
+    - header_class: (String) 헤더 추가 클래스
+    - body_class: (String) 본문 추가 클래스
+-%>
+<%
+  variant ||= :default
+  title ||= nil
+  subtitle ||= nil
+  padding ||= :md
+  shadow ||= (variant == :default)
+  border ||= false
+  rounded ||= :lg
+  extra_class ||= ""
+  header_class ||= ""
+  body_class ||= ""
+
+  variant_classes = {
+    default: "bg-white",
+    blue: "bg-blue-50",
+    green: "bg-green-50",
+    red: "bg-red-50",
+    yellow: "bg-yellow-50",
+    purple: "bg-purple-50"
+  }
+
+  title_colors = {
+    default: "text-gray-900",
+    blue: "text-blue-900",
+    green: "text-green-900",
+    red: "text-red-900",
+    yellow: "text-yellow-900",
+    purple: "text-purple-900"
+  }
+
+  subtitle_colors = {
+    default: "text-gray-500",
+    blue: "text-blue-700",
+    green: "text-green-700",
+    red: "text-red-700",
+    yellow: "text-yellow-700",
+    purple: "text-purple-700"
+  }
+
+  padding_classes = {
+    none: "",
+    sm: "p-4",
+    md: "p-6",
+    lg: "p-8"
+  }
+
+  rounded_classes = {
+    sm: "rounded-md",
+    md: "rounded-lg",
+    lg: "rounded-xl"
+  }
+
+  shadow_class = shadow ? "shadow" : ""
+  border_class = border ? "border border-gray-200" : ""
+
+  card_classes = [
+    variant_classes[variant],
+    rounded_classes[rounded],
+    shadow_class,
+    border_class,
+    extra_class
+  ].compact.join(" ")
+%>
+
+<div class="<%= card_classes %>">
+  <% if title.present? || subtitle.present? %>
+    <div class="<%= padding_classes[padding] %> <%= 'pb-0' if block_given? %> <%= header_class %>">
+      <% if title.present? %>
+        <h3 class="text-lg font-medium <%= title_colors[variant] %>"><%= title %></h3>
+      <% end %>
+      <% if subtitle.present? %>
+        <p class="mt-1 text-sm <%= subtitle_colors[variant] %>"><%= subtitle %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if block_given? %>
+    <div class="<%= padding_classes[padding] %> <%= 'pt-4' if title.present? %> <%= body_class %>">
+      <%= yield %>
+    </div>
+  <% end %>
+</div>

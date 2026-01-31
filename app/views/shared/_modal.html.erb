@@ -1,0 +1,133 @@
+<%#
+  Modal Component
+
+  Usage:
+    <%= render "shared/modal", id: "my-modal", title: "확인" do %>
+      <p>정말 삭제하시겠습니까?</p>
+    <% end %>
+
+  With footer actions:
+    <%= render "shared/modal", id: "confirm-modal", title: "확인",
+        show_footer: true,
+        confirm_text: "삭제",
+        confirm_variant: :destructive do %>
+      <p>이 작업은 취소할 수 없습니다.</p>
+    <% end %>
+
+  Trigger button (place anywhere):
+    <button data-controller="modal"
+            data-modal-remote-value="#my-modal"
+            data-action="click->modal#open">
+      모달 열기
+    </button>
+
+  Parameters:
+    - id: (String) 모달 고유 ID (필수)
+    - title: (String) 모달 제목
+    - size: (Symbol) :sm, :md, :lg, :xl, :full (default: :md)
+    - show_close: (Boolean) 닫기 버튼 표시 (default: true)
+    - show_footer: (Boolean) 푸터 표시 (default: false)
+    - confirm_text: (String) 확인 버튼 텍스트 (default: "확인")
+    - cancel_text: (String) 취소 버튼 텍스트 (default: "취소")
+    - confirm_variant: (Symbol) 확인 버튼 variant (default: :primary)
+    - backdrop_close: (Boolean) 배경 클릭시 닫기 (default: true)
+    - escape_close: (Boolean) ESC 키로 닫기 (default: true)
+-%>
+<%
+  id ||= "modal-#{SecureRandom.hex(4)}"
+  title ||= nil
+  size ||= :md
+  show_close ||= true
+  show_footer ||= false
+  confirm_text ||= "확인"
+  cancel_text ||= "취소"
+  confirm_variant ||= :primary
+  backdrop_close ||= true
+  escape_close ||= true
+
+  size_classes = {
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+    full: "max-w-4xl"
+  }
+%>
+
+<div id="<%= id %>"
+     data-controller="modal"
+     data-modal-backdrop-close-value="<%= backdrop_close %>"
+     data-modal-escape-close-value="<%= escape_close %>">
+
+  <div data-modal-target="container" class="hidden">
+    <%# Backdrop %>
+    <div data-modal-target="backdrop"
+         data-action="click->modal#closeOnBackdrop"
+         class="fixed inset-0 bg-black bg-opacity-50 z-[100] transition-opacity"></div>
+
+    <%# Dialog %>
+    <div data-modal-target="dialog"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="<%= id %>-title"
+         class="fixed inset-0 z-[110] flex items-center justify-center p-4 overflow-y-auto">
+
+      <div class="bg-white rounded-lg shadow-xl <%= size_classes[size] %> w-full my-8">
+        <%# Header %>
+        <% if title.present? || show_close %>
+          <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <% if title.present? %>
+              <h3 id="<%= id %>-title" class="text-lg font-semibold text-gray-900">
+                <%= title %>
+              </h3>
+            <% else %>
+              <span></span>
+            <% end %>
+
+            <% if show_close %>
+              <button type="button"
+                      data-action="click->modal#close"
+                      class="text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md p-1">
+                <span class="sr-only">닫기</span>
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%# Body %>
+        <div class="px-6 py-4">
+          <%= yield if block_given? %>
+        </div>
+
+        <%# Footer %>
+        <% if show_footer %>
+          <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+            <button type="button"
+                    data-action="click->modal#cancel"
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <%= cancel_text %>
+            </button>
+            <%
+              confirm_classes = case confirm_variant
+              when :destructive
+                "bg-red-600 hover:bg-red-700 focus:ring-red-500"
+              when :secondary
+                "bg-gray-600 hover:bg-gray-700 focus:ring-gray-500"
+              else
+                "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
+              end
+            %>
+            <button type="button"
+                    data-action="click->modal#confirm"
+                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white <%= confirm_classes %> focus:outline-none focus:ring-2 focus:ring-offset-2">
+              <%= confirm_text %>
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

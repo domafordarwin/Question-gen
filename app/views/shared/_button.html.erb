@@ -1,0 +1,104 @@
+<%#
+  Button Component
+
+  Usage:
+    <%= render "shared/button", text: "클릭" %>
+    <%= render "shared/button", text: "저장", variant: :primary, size: :lg %>
+    <%= render "shared/button", text: "삭제", variant: :destructive %>
+    <%= render "shared/button", text: "취소", variant: :secondary, type: :button %>
+
+  With link:
+    <%= render "shared/button", text: "이동", href: some_path %>
+
+  With form:
+    <%= render "shared/button", text: "제출", type: :submit %>
+
+  With icon:
+    <%= render "shared/button", text: "추가", icon: "plus" %>
+
+  Loading state:
+    <%= render "shared/button", text: "저장 중...", loading: true, disabled: true %>
+
+  Parameters:
+    - text: (String) 버튼 텍스트
+    - variant: (Symbol) :primary, :secondary, :destructive, :ghost, :outline (default: :primary)
+    - size: (Symbol) :sm, :md, :lg (default: :md)
+    - type: (Symbol) :button, :submit, :reset (default: :submit)
+    - href: (String) 링크 URL (있으면 <a> 태그로 렌더링)
+    - method: (Symbol) HTTP 메서드 for link (default: :get)
+    - disabled: (Boolean) 비활성화 상태 (default: false)
+    - loading: (Boolean) 로딩 상태 (default: false)
+    - icon: (String) 아이콘 이름 (optional)
+    - full_width: (Boolean) 전체 너비 (default: false)
+    - class: (String) 추가 CSS 클래스
+    - data: (Hash) data 속성
+    - **options: 기타 HTML 속성
+-%>
+<%
+  text ||= "버튼"
+  variant ||= :primary
+  size ||= :md
+  type ||= :submit
+  href ||= nil
+  method ||= :get
+  disabled ||= false
+  loading ||= false
+  icon ||= nil
+  full_width ||= false
+  extra_class ||= defined?(binding.local_variable_get(:class)) ? binding.local_variable_get(:class) : nil
+  data ||= {}
+
+  base_classes = "inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
+
+  variant_classes = {
+    primary: "bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500",
+    secondary: "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-blue-500",
+    destructive: "bg-red-600 hover:bg-red-700 text-white focus:ring-red-500",
+    ghost: "text-blue-600 hover:bg-blue-50 focus:ring-blue-500",
+    outline: "border border-blue-600 text-blue-600 hover:bg-blue-50 focus:ring-blue-500"
+  }
+
+  size_classes = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-sm",
+    lg: "px-6 py-3 text-base"
+  }
+
+  disabled_classes = "disabled:opacity-50 disabled:cursor-not-allowed"
+  width_class = full_width ? "w-full" : ""
+
+  all_classes = [
+    base_classes,
+    variant_classes[variant],
+    size_classes[size],
+    disabled_classes,
+    width_class,
+    extra_class
+  ].compact.join(" ")
+%>
+
+<% if href.present? %>
+  <%= link_to href, class: all_classes, method: method, data: data do %>
+    <% if loading %>
+      <svg class="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    <% elsif icon.present? %>
+      <%= render "shared/icons/#{icon}", class: "-ml-1 mr-2 h-4 w-4" rescue nil %>
+    <% end %>
+    <%= text %>
+  <% end %>
+<% else %>
+  <button type="<%= type %>" class="<%= all_classes %>" <%= "disabled" if disabled || loading %> data-<%= data.map { |k, v| "#{k}=\"#{v}\"" }.join(" data-") %>>
+    <% if loading %>
+      <svg class="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    <% elsif icon.present? %>
+      <%= render "shared/icons/#{icon}", class: "-ml-1 mr-2 h-4 w-4" rescue nil %>
+    <% end %>
+    <%= text %>
+  </button>
+<% end %>

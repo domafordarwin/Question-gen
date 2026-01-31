@@ -25,5 +25,22 @@
 
   <body>
     <%= yield %>
+
+    <%# Toast notifications container %>
+    <%= render "shared/toast_container" %>
+
+    <%# Flash messages as toasts %>
+    <% flash.each do |type, message| %>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          window.dispatchEvent(new CustomEvent("toast:show", {
+            detail: {
+              message: "<%= j message %>",
+              type: "<%= type == 'notice' ? 'success' : type == 'alert' ? 'error' : 'info' %>"
+            }
+          }));
+        });
+      </script>
+    <% end %>
   </body>
 </html>

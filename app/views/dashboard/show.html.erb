@@ -1,14 +1,11 @@
 <div class="min-h-screen bg-gray-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="bg-white shadow rounded-lg p-6">
+    <%= render "shared/card" do %>
       <div class="flex items-center justify-between mb-6">
         <div>
           <h1 class="text-2xl font-bold text-gray-900">안녕하세요, <%= @user.display_name %>님!</h1>
           <p class="text-sm text-gray-500 mt-1">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-              <%= @user.admin? ? 'bg-red-100 text-red-800' : @user.teacher? ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' %>">
-              <%= @user.role_i18n %>
-            </span>
+            <%= render "shared/badge", role: @user.role %>
           </p>
         </div>
         <div>
@@ -23,71 +20,60 @@
 
         <% if @user.student? %>
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <div class="bg-blue-50 rounded-lg p-6">
-              <h3 class="text-lg font-medium text-blue-900">질문 생성 연습</h3>
-              <p class="mt-2 text-sm text-blue-700">새로운 콘텐츠로 질문 만들기를 연습하세요.</p>
-              <div class="mt-4">
-                <span class="text-gray-400 text-sm">(준비 중)</span>
+            <%= render "shared/card", variant: :blue, title: "질문 생성 연습", subtitle: "새로운 콘텐츠로 질문 만들기를 연습하세요." do %>
+              <div class="mt-2">
+                <%= render "shared/badge", text: "준비 중", variant: :gray %>
               </div>
-            </div>
-            <div class="bg-green-50 rounded-lg p-6">
-              <h3 class="text-lg font-medium text-green-900">내 기록</h3>
-              <p class="mt-2 text-sm text-green-700">지금까지 작성한 질문과 피드백을 확인하세요.</p>
-              <div class="mt-4">
-                <span class="text-gray-400 text-sm">(준비 중)</span>
+            <% end %>
+
+            <%= render "shared/card", variant: :green, title: "내 기록", subtitle: "지금까지 작성한 질문과 피드백을 확인하세요." do %>
+              <div class="mt-2">
+                <%= render "shared/badge", text: "준비 중", variant: :gray %>
               </div>
-            </div>
-            <div class="bg-purple-50 rounded-lg p-6">
-              <h3 class="text-lg font-medium text-purple-900">성장 리포트</h3>
-              <p class="mt-2 text-sm text-purple-700">나의 발문 능력 성장 과정을 확인하세요.</p>
-              <div class="mt-4">
-                <span class="text-gray-400 text-sm">(준비 중)</span>
+            <% end %>
+
+            <%= render "shared/card", variant: :purple, title: "성장 리포트", subtitle: "나의 발문 능력 성장 과정을 확인하세요." do %>
+              <div class="mt-2">
+                <%= render "shared/badge", text: "준비 중", variant: :gray %>
               </div>
-            </div>
+            <% end %>
           </div>
         <% elsif @user.teacher? %>
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <div class="bg-blue-50 rounded-lg p-6">
-              <h3 class="text-lg font-medium text-blue-900">콘텐츠 관리</h3>
-              <p class="mt-2 text-sm text-blue-700">학습 자료를 등록하고 관리하세요.</p>
-              <div class="mt-4">
-                <span class="text-gray-400 text-sm">(준비 중)</span>
+            <%= render "shared/card", variant: :blue, title: "콘텐츠 관리", subtitle: "학습 자료를 등록하고 관리하세요." do %>
+              <div class="mt-2">
+                <%= render "shared/badge", text: "준비 중", variant: :gray %>
               </div>
-            </div>
-            <div class="bg-green-50 rounded-lg p-6">
-              <h3 class="text-lg font-medium text-green-900">학생 관리</h3>
-              <p class="mt-2 text-sm text-green-700">학생들의 학습 현황을 확인하세요.</p>
-              <div class="mt-4">
-                <span class="text-gray-400 text-sm">(준비 중)</span>
+            <% end %>
+
+            <%= render "shared/card", variant: :green, title: "학생 관리", subtitle: "학생들의 학습 현황을 확인하세요." do %>
+              <div class="mt-2">
+                <%= render "shared/badge", text: "준비 중", variant: :gray %>
               </div>
-            </div>
-            <div class="bg-purple-50 rounded-lg p-6">
-              <h3 class="text-lg font-medium text-purple-900">리포트</h3>
-              <p class="mt-2 text-sm text-purple-700">학급 전체의 학습 분석 리포트를 확인하세요.</p>
-              <div class="mt-4">
-                <span class="text-gray-400 text-sm">(준비 중)</span>
+            <% end %>
+
+            <%= render "shared/card", variant: :purple, title: "리포트", subtitle: "학급 전체의 학습 분석 리포트를 확인하세요." do %>
+              <div class="mt-2">
+                <%= render "shared/badge", text: "준비 중", variant: :gray %>
               </div>
-            </div>
+            <% end %>
           </div>
         <% else %>
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div class="bg-red-50 rounded-lg p-6">
-              <h3 class="text-lg font-medium text-red-900">사용자 관리</h3>
-              <p class="mt-2 text-sm text-red-700">전체 사용자를 관리하세요.</p>
-              <div class="mt-4">
-                <span class="text-gray-400 text-sm">(준비 중)</span>
+            <%= render "shared/card", variant: :red, title: "사용자 관리", subtitle: "전체 사용자를 관리하세요." do %>
+              <div class="mt-2">
+                <%= render "shared/badge", text: "준비 중", variant: :gray %>
               </div>
-            </div>
-            <div class="bg-yellow-50 rounded-lg p-6">
-              <h3 class="text-lg font-medium text-yellow-900">시스템 설정</h3>
-              <p class="mt-2 text-sm text-yellow-700">시스템 전체 설정을 관리하세요.</p>
-              <div class="mt-4">
-                <span class="text-gray-400 text-sm">(준비 중)</span>
+            <% end %>
+
+            <%= render "shared/card", variant: :yellow, title: "시스템 설정", subtitle: "시스템 전체 설정을 관리하세요." do %>
+              <div class="mt-2">
+                <%= render "shared/badge", text: "준비 중", variant: :gray %>
               </div>
-            </div>
+            <% end %>
           </div>
         <% end %>
       </div>
-    </div>
+    <% end %>
   </div>
 </div>
