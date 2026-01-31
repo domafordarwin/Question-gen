@@ -1,12 +1,12 @@
 #!/bin/bash -e
 
 # Set HTTP_PORT for Thruster from Railway's PORT environment variable
-# Thruster uses HTTP_PORT to determine which port to listen on
 export HTTP_PORT="${PORT:-80}"
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
+# Always run database preparation in production
+if [ "$RAILS_ENV" == "production" ]; then
+  echo "Running database migrations..."
+  ./bin/rails db:prepare || echo "Database prepare failed, continuing..."
 fi
 
 exec "${@}"
