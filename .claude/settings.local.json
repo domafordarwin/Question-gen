@@ -5,7 +5,8 @@
       "mcp__acp__Write",
       "mcp__acp__Edit",
       "Skill(pdca)",
-      "Skill(pdca:*)"
+      "Skill(pdca:*)",
+      "WebFetch(domain:railway.com)"
     ]
   }
 }
