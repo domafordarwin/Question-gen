@@ -5,7 +5,8 @@
 ## Project Info
 
 - **Level**: Dynamic
-- **Framework**: Ruby on Rails 7+
+- **Framework**: Ruby on Rails 8.1.2
+- **Ruby Version**: 3.4.8
 - **Database**: PostgreSQL
 - **Deployment**: Railway
 - **Language**: Ruby (Tier 2)
@@ -25,15 +26,14 @@
 
 ```
 Backend:
-- Ruby on Rails 7.x (API mode or full-stack)
+- Ruby on Rails 8.1.2 (Full-stack with Hotwire)
 - PostgreSQL (Railway Postgres)
-- Redis (세션/캐시, 선택사항)
+- Solid Cache/Queue/Cable (Rails 8 built-in)
 - Devise (인증)
-- Sidekiq (백그라운드 작업, 선택사항)
 
 Frontend:
-- Hotwire (Turbo + Stimulus) 또는
-- React/Vue (API 분리 시)
+- Hotwire (Turbo + Stimulus)
+- Tailwind CSS (선택사항)
 
 AI Integration:
 - OpenAI API (질문 품질 평가)
@@ -41,6 +41,7 @@ AI Integration:
 
 Deployment:
 - Railway (앱 + DB)
+- Kamal (Docker 배포, 선택사항)
 ```
 
 ## Project Structure
@@ -52,16 +53,19 @@ question-gen-app/
 │   ├── models/
 │   ├── views/
 │   ├── services/          # 비즈니스 로직
-│   └── jobs/              # 백그라운드 작업
+│   └── jobs/              # 백그라운드 작업 (Solid Queue)
 ├── config/
 ├── db/
-│   └── migrate/
+│   ├── migrate/
+│   ├── cache_schema.rb    # Solid Cache
+│   ├── queue_schema.rb    # Solid Queue
+│   └── cable_schema.rb    # Solid Cable
 ├── docs/                  # PDCA 문서
 │   ├── 01-plan/
 │   ├── 02-design/
 │   ├── 03-analysis/
 │   └── 04-report/
-├── spec/                  # RSpec 테스트
+├── rawData/               # 학습 데이터 (git 제외)
 └── Procfile              # Railway 배포용
 ```
 
@@ -78,7 +82,7 @@ bin/rails console
 bin/rails db:migrate
 
 # 테스트
-bundle exec rspec
+bin/rails test
 
 # Railway 배포
 railway up
@@ -95,11 +99,12 @@ SECRET_KEY_BASE=        # 세션 암호화
 
 ## PDCA Status
 
-현재 단계: **Plan** (프로젝트 초기화)
+현재 단계: **Plan** (프로젝트 초기화 완료)
 
 ## Conventions
 
 - Ruby Style Guide 준수 (RuboCop)
-- RSpec for testing
+- Rails 8 conventions
 - Service Object 패턴 사용
 - RESTful API 설계
+- Hotwire for interactive UI
