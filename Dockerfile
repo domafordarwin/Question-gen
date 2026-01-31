@@ -77,6 +77,7 @@ COPY --chown=rails:rails --from=build /rails /rails
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start server directly (Railway provides PORT env var)
+# Start server using PORT env var (Railway dynamically assigns port)
+ENV PORT=3000
 EXPOSE 3000
-CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
+CMD ["sh", "-c", "./bin/rails server -b 0.0.0.0 -p ${PORT}"]
