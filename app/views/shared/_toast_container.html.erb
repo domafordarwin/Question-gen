@@ -1,44 +1,4 @@
-<%#
-  Toast Container
-
-  Place this once in your layout (e.g., application.html.erb) to enable toast notifications.
-
-  Usage in layout:
-    <%= render "shared/toast_container" %>
-
-  With position:
-    <%= render "shared/toast_container", position: "bottom-right" %>
-
-  Trigger toast from anywhere:
-    1. Via button with data attributes:
-       <button data-action="click->toast#show"
-               data-toast-message="저장되었습니다"
-               data-toast-type="success">
-         저장
-       </button>
-
-    2. Via JavaScript:
-       window.dispatchEvent(new CustomEvent("toast:show", {
-         detail: { message: "성공!", type: "success", duration: 3000 }
-       }))
-
-    3. Via Rails flash messages (add to layout):
-       <% flash.each do |type, message| %>
-         <script>
-           window.dispatchEvent(new CustomEvent("toast:show", {
-             detail: {
-               message: "<%= j message %>",
-               type: "<%= type == 'notice' ? 'success' : type == 'alert' ? 'error' : 'info' %>"
-             }
-           }))
-         </script>
-       <% end %>
-
-  Parameters:
-    - position: (String) "top-right", "top-left", "bottom-right", "bottom-left",
-                         "top-center", "bottom-center" (default: "top-right")
-    - duration: (Number) 기본 표시 시간 (ms) (default: 5000)
--%>
+<%# Toast Container - provides toast notification functionality -%>
 <%
   position ||= "top-right"
   duration ||= 5000

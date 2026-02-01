@@ -6,7 +6,12 @@
       "mcp__acp__Edit",
       "Skill(pdca)",
       "Skill(pdca:*)",
-      "WebFetch(domain:railway.com)"
+      "WebFetch(domain:railway.com)",
+      "Bash(bundle install:*)",
+      "Bash(bin/rails db:migrate:*)",
+      "Bash(bin/rails server:*)",
+      "Bash(curl:*)",
+      "Bash(identify:*)"
     ]
   }
 }
